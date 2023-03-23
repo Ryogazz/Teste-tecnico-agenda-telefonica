@@ -53,7 +53,7 @@ const ModalEdit: React.FC<ModalEditProps> = ({onClose, identify, id }) => {
               </svg>
             </button>
             {
-              identify === 'edit' ? <Edit /> : <Delete />
+              identify === 'edit' ? <Edit id={id}/> : <Delete />
             }
           </div>
         </div>

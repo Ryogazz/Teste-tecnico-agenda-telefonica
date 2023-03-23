@@ -66,3 +66,28 @@ export function deleteSchedule(id: number): Promise<void> {
     .delete(`http://teste-frontend.saperx.com.br/api/schedule/${id}`)
     .then(() => {});
 }
+
+export interface tel {
+  id: number;
+    id_schedule: number;
+    number: string;
+}
+export interface contact {
+  id: number;
+  name: string;
+  numbers: tel[];
+  email: string;
+  cpf: string;
+  date_born: string; // format: YYYY-mm-dd
+}    
+export interface ScheduleById {
+  status: boolean;
+  data: contact[];
+}
+
+export function getScheduleById(id: number): Promise<ScheduleById> {
+  return axios
+    .get(`http://teste-frontend.saperx.com.br/api/schedule/${id}`)
+    .then((response) => response.data);
+}
+

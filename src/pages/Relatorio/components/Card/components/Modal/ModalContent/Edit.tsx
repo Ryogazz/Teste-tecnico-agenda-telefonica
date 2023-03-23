@@ -1,7 +1,11 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getScheduleById, ScheduleById, contact } from "../../../../../../../services";
 
-const Edit = () => {
-
+interface editProps {
+  id: number;
+}
+const Edit = (props: editProps) => {
   interface FormValues {
     name: string;
     email: string;
@@ -9,6 +13,25 @@ const Edit = () => {
     cpf: string;
     telefone: string;
   }
+
+  interface formaDatavalues {
+    id: number;
+    name: string;
+    numbers: {
+      id: number;
+      id_schedule: number;
+      number: string;
+    }[];
+    email: string;
+    cpf: string;
+    date_born: string; // format: YYYY-mm-dd
+  }
+
+  interface text {
+    id: number;
+    name: string;
+  }
+  const [formData, setFormData] = useState<contact>({} as contact);
 
   const {
     control,
@@ -22,6 +45,29 @@ const Edit = () => {
     console.log(data);
   };
 
+  const handleGetById = async (id: number) => {
+    const response = await getScheduleById(id);
+    const [data] = response.data;
+    console.log(data)
+    // const newData: formaDatavalues = {
+    //   id: response.data[0].data.id,
+    //   name: response.data[0].data.name,
+    //   numbers: response.data[0].data.numbers.map(number => ({
+    //     id: number.id,
+    //     id_schedule: number.id_schedule,
+    //     number: number.number,
+    //   })),
+    //   email: response.data[0].data.email,
+    //   cpf: response.data[0].data.cpf,
+    //   date_born: response.data[0].data.date_born,
+    // };
+    setFormData(data);
+  };
+
+  console.log(formData);
+  useEffect(() => {
+    handleGetById(props.id);
+  }, []);
 
   return (
     <div className="h-full bg-[#E3E6EA] rounded-lg flex flex-col justify-center items-center max-w-max px-2 py-4">
@@ -35,7 +81,7 @@ const Edit = () => {
         <div className="flex flex-row justify-start items-center space-x-2 w-full">
           <label htmlFor="name">Nome:</label>
           <input
-            defaultValue={''}
+            value={formData.name}
             className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
             type="text"
             id="name"
@@ -53,6 +99,7 @@ const Edit = () => {
           <label htmlFor="email">E-mail:</label>
 
           <input
+            value={formData.email}
             className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
             type="email"
             id="email"
@@ -65,6 +112,7 @@ const Edit = () => {
         <div className="flex flex-row justify-start items-center space-x-2 w-full">
           <label htmlFor="date_born">Data de Nascimento:</label>
           <input
+            value={formData.date_born}
             className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
             type="date"
             id="date_born"
@@ -80,6 +128,7 @@ const Edit = () => {
           <label htmlFor="cpf">CPF:</label>
 
           <input
+            value={formData.cpf}
             className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
             type="text"
             id="cpf"
@@ -97,6 +146,7 @@ const Edit = () => {
           <label htmlFor="telefone">Telefone:</label>
 
           <input
+            value={formData.numbers[0].number}
             className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
             type="tel"
             id="telefone"
