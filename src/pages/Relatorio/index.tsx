@@ -20,6 +20,7 @@ const Relatorio = () => {
   };
 
   interface CardProps {
+    id: number;
     name: string;
     email: string;
     cpf: string;
@@ -34,10 +35,12 @@ const Relatorio = () => {
 const renderCards = async () => {
   const response = await getData();
   const data = response.data; 
-  const cards = data.map((item: CardProps, index: number) => {
+  console.log(data);
+  const cards = data.map((item: CardProps) => {
     return (
       <Card
-        key={index}
+        id={item.id}
+        key={item.id}
         name={item.name}
         email={item.email}
         date_born={item.date_born}
@@ -61,7 +64,7 @@ const renderCards = async () => {
   return (
     <div className="min-h-screen w-screen flex flex-col justify-between items-center bg-gray-100">
       <Menu />
-      <div>
+      <div className='bg-purple-800 grid grid-cols-3 gap-8 mx-auto px-4 py-4 rounded-md'>
         {cards}
       </div>
       <Footer />
