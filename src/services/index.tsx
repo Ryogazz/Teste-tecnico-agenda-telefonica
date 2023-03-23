@@ -22,13 +22,21 @@ export function getAllSchedules(): Promise<Schedule> {
     .then((response) => response.data);
 }
 
+export interface CreateSchedule {
+  name: string;
+  numbers: string[];
+  email: string;
+  cpf: string;
+  date_born: string; // format: YYYY-mm-dd
+}
 
-export function createSchedule(schedule: Schedule): Promise<Schedule> {
+export function createSchedule(schedule: CreateSchedule) {
   return axios
-    .post<Schedule>(
-      "http://teste-frontend.saperx.com.br/api/schedule",
-      schedule
-    )
+    .post("http://teste-frontend.saperx.com.br/api/schedule", schedule, {
+      headers: {
+        Accept: "application/json",
+      },
+    })
     .then((response) => response.data);
 }
 
@@ -69,8 +77,8 @@ export function deleteSchedule(id: number): Promise<void> {
 
 export interface tel {
   id: number;
-    id_schedule: number;
-    number: string;
+  id_schedule: number;
+  number: string;
 }
 export interface contact {
   id: number;
@@ -79,7 +87,7 @@ export interface contact {
   email: string;
   cpf: string;
   date_born: string; // format: YYYY-mm-dd
-}    
+}
 export interface ScheduleById {
   status: boolean;
   data: contact[];
@@ -90,4 +98,3 @@ export function getScheduleById(id: number): Promise<ScheduleById> {
     .get(`http://teste-frontend.saperx.com.br/api/schedule/${id}`)
     .then((response) => response.data);
 }
-

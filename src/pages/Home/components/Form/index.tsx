@@ -1,12 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { tel } from "../../../../services";
+import { createSchedule, tel, CreateSchedule } from "../../../../services";
 interface FormValues {
+  id: number;
   name: string;
   email: string;
   date_born: string;
   cpf: string;
-  telefones: tel[];
+  numbers: tel[];
 }
 
 const Form: React.FC = () => {
@@ -15,13 +16,21 @@ const Form: React.FC = () => {
     handleSubmit,
     register,
     resetField,
-    setError,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>();
   const [addInput, setAddInput] = React.useState(1);
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log(data);
+    await createSchedule({
+      name: data.name,
+      email: data.email,
+      cpf: data.cpf,
+      date_born: data.date_born,
+      numbers: data.numbers.map((item) => {
+        return item.number;
+      }),
+    });
   };
 
   const handleADDtel = () => {
@@ -30,7 +39,6 @@ const Form: React.FC = () => {
   const handleRemoveTel = () => {
     setAddInput((count) => count - 1);
   };
-
 
   return (
     <div className="min-h-max bg-[#E3E6EA] rounded-lg flex flex-col justify-center items-center min-w-max px-2 py-4">
@@ -117,18 +125,17 @@ const Form: React.FC = () => {
                   id={index.toString()}
                   className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   type="tel"
-                  {...register(`telefones.${index}.number`, {
+                  {...register(`numbers.${index}.number`, {
                     required: true,
                     minLength: 9,
                     maxLength: 11,
                   })}
-                  />
-             {errors.telefones?.[index]?.number && (
-            <span className="text-red-600">Telefone é obrigatório</span>
-          )}
+                />
+                {errors.numbers?.[index]?.number && (
+                  <span className="text-red-600">Telefone é obrigatório</span>
+                )}
               </div>
             ))}
-
           </div>
           <div className="flex flex-row items-center justify-between">
             <button
