@@ -1,173 +1,180 @@
-import { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { getScheduleById, ScheduleById, contact } from "../../../../../../../services";
-
-interface editProps {
+import { ModalContext } from '../../../../../../../context/modalContext';
+import {  tel, updateSchedule } from "../../../../../../../services";
+interface FormValues {
   id: number;
+  name: string;
+  email: string;
+  date_born: string;
+  cpf: string;
+  numbers: tel[];
 }
-const Edit = (props: editProps) => {
-  interface FormValues {
-    name: string;
-    email: string;
-    date_born: string;
-    cpf: string;
-    telefone: string;
-  }
 
-  interface formaDatavalues {
-    id: number;
-    name: string;
-    numbers: {
-      id: number;
-      id_schedule: number;
-      number: string;
-    }[];
-    email: string;
-    cpf: string;
-    date_born: string; // format: YYYY-mm-dd
-  }
+const Edit = ( ) => {
 
-  interface text {
-    id: number;
-    name: string;
-  }
-  const [formData, setFormData] = useState<contact>({} as contact);
+  const {setIsModalOpened, editData} = useContext(ModalContext);
+  const {cpf,date_born,email,id,name,numbers} = editData;
 
   const {
-    control,
     handleSubmit,
     register,
-    resetField,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>();
+  const [addInput, setAddInput] = React.useState(numbers.length);
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    await updateSchedule(id,{
+      name: data.name,
+      email: data.email,
+      cpf: data.cpf,
+      date_born: data.date_born,
+      numbers: data.numbers.map((item) => {
+        return item.number;
+      }),
+    });
+    setIsModalOpened(false);
   };
 
-  const handleGetById = async (id: number) => {
-    const response = await getScheduleById(id);
-    const [data] = response.data;
-    console.log(data)
-    // const newData: formaDatavalues = {
-    //   id: response.data[0].data.id,
-    //   name: response.data[0].data.name,
-    //   numbers: response.data[0].data.numbers.map(number => ({
-    //     id: number.id,
-    //     id_schedule: number.id_schedule,
-    //     number: number.number,
-    //   })),
-    //   email: response.data[0].data.email,
-    //   cpf: response.data[0].data.cpf,
-    //   date_born: response.data[0].data.date_born,
-    // };
-    setFormData(data);
+  const handleADDtel = () => {
+    setAddInput((count) => count + 1);
   };
-
-  console.log(formData);
-  useEffect(() => {
-    handleGetById(props.id);
-  }, []);
+  const handleRemoveTel = () => {
+    setAddInput((count) => count - 1);
+  };
 
   return (
-    <div className="h-full bg-[#E3E6EA] rounded-lg flex flex-col justify-center items-center max-w-max px-2 py-4">
-      <h1 className="text-zinc-900 font-semibold text-left text-xl max-w-max capitalize my-2">
-        Editar contato
+    <div className="min-h-max bg-[#E3E6EA] rounded-lg flex flex-col justify-center items-center min-w-max px-2 py-4">
+      <h1 className="text-zinc-900 font-semibold text-start text-xl max-w-max capitalize my-2">
+        Editar Contato
       </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" bg-gradient-to-b from-[#E3E6EA] via-white rounded-lg h-[550px] w-96 gap-10 flex flex-col justify-between items-start mx-2 my-2 p-2"
+        className=" bg-gradient-to-b from-[#E3E6EA] via-white rounded-lg min-h-max w-full gap-10 flex flex-col justify-between items-start mx-2 my-2 p-2"
       >
-        <div className="flex flex-row justify-start items-center space-x-2 w-full">
-          <label htmlFor="name">Nome:</label>
-          <input
-            value={formData.name}
-            className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="text"
-            id="name"
-            {...register("name", {
-              required: true,
-              minLength: 6,
-              maxLength: 150,
-            })}
-          />
-          {errors.name && (
-            <span className="text-red-600">Nome é obrigatório</span>
-          )}
+        <div className="flex flex-row justify-center items-start gap-12 ">
+          <div className="flex flex-col justify-center items-start space-y-2 w-full">
+            <label htmlFor="name">Nome:</label>
+            <input
+              defaultValue={name}
+              className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              type="text"
+              id="name"
+              {...register("name", {
+                required: true,
+                minLength: 6,
+                maxLength: 150,
+              })}
+            />
+            {errors.name && (
+              <span className="text-red-600">Nome é obrigatório</span>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-start space-y-2 w-full">
+            <label htmlFor="date_born">Data de Nascimento:</label>
+            <input
+              defaultValue={date_born}
+              className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              type="date"
+              id="date_born"
+              {...register("date_born", { required: true })}
+            />
+            {errors.date_born && (
+              <span className="text-red-600">
+                Data de nascimento é obrigatório
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex flex-row justify-start items-center space-x-2 w-full">
-          <label htmlFor="email">E-mail:</label>
+        <div className="flex flex-row justify-center items-start gap-12 ">
+          <div className="flex flex-col justify-center items-start space-y-2 w-full">
+            <label htmlFor="email">E-mail:</label>
+            <input
+              defaultValue={email}
+              className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              type="email"
+              id="email"
+              {...register("email", { required: true })}
+            />
+            {errors.email && (
+              <span className="text-red-600">Email é obrigatório</span>
+            )}
+          </div>
 
-          <input
-            value={formData.email}
-            className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="email"
-            id="email"
-            {...register("email", { required: true })}
-          />
-          {errors.email && (
-            <span className="text-red-600">Email é obrigatório</span>
-          )}
-        </div>
-        <div className="flex flex-row justify-start items-center space-x-2 w-full">
-          <label htmlFor="date_born">Data de Nascimento:</label>
-          <input
-            value={formData.date_born}
-            className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="date"
-            id="date_born"
-            {...register("date_born", { required: true })}
-          />
-          {errors.date_born && (
-            <span className="text-red-600">
-              Data de nascimento é obrigatório
-            </span>
-          )}
-        </div>
-        <div className="flex flex-row justify-start items-center space-x-2 w-full">
-          <label htmlFor="cpf">CPF:</label>
+          <div className="flex flex-col justify-center items-start space-y-2 w-full">
+            <label htmlFor="cpf">CPF:</label>
 
-          <input
-            value={formData.cpf}
-            className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="text"
-            id="cpf"
-            {...register("cpf", {
-              required: true,
-              maxLength: 11,
-              minLength: 11,
-            })}
-          />
-          {errors.cpf && (
-            <span className="text-red-600">CPF é obrigatório</span>
-          )}
+            <input
+              defaultValue={cpf}
+              className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              type="text"
+              id="cpf"
+              {...register("cpf", {
+                required: true,
+                maxLength: 11,
+                minLength: 11,
+              })}
+            />
+            {errors.cpf && (
+              <span className="text-red-600">CPF é obrigatório</span>
+            )}
+          </div>
         </div>
-        <div className="flex flex-row justify-start items-center space-x-2 w-full">
-          <label htmlFor="telefone">Telefone:</label>
+        <div className="flex flex-col justify-center items-start gap-12 ">
+          <div className="flex flex-col justify-start items-center space-y-2 w-full my-1 h-full ">
+            {Array.from({ length: addInput }).map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-row justify-center items-center my-1"
+              >
+                <label htmlFor="telefone">Telefone:</label>
+                <input
+                  defaultValue={numbers[index]}
+                  id={index.toString()}
+                  className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  type="tel"
+                  {...register(`numbers.${index}.number`, {
+                    required: true,
+                    minLength: 9,
+                    maxLength: 11,
+                  })}
+                />
+                {errors.numbers?.[index]?.number && (
+                  <span className="text-red-600">Telefone é obrigatório</span>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <button
+              className="rounded-sm p-2 uppercase bg-green-600 text-white font-bold cursor-pointer transition duration-300 ease-in-out
+           hover:bg-green-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
+           "
+              onClick={handleADDtel}
+            >
+              Adicionar numero
+            </button>
 
-          <input
-            value={formData.numbers[0].number}
-            className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            type="tel"
-            id="telefone"
-            {...register("telefone", {
-              required: true,
-              minLength: 9,
-              maxLength: 11,
-            })}
-          />
-          {errors.telefone && (
-            <span className="text-red-600">Telefone é obrigatório</span>
-          )}
+            <button
+              className="rounded-sm p-2 uppercase bg-red-600 text-white font-bold cursor-pointer transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed
+           hover:bg-red-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
+           "
+              onClick={handleRemoveTel}
+              disabled={addInput <= 1}
+            >
+              Remover numero
+            </button>
+          </div>
         </div>
+
         <button
           className="rounded-sm p-2 uppercase bg-blue-600 text-white font-bold cursor-pointer transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed
-      hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
-      "
+        hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
+        "
           disabled={!isDirty || !isValid}
           type="submit"
         >
-          Enviar
+          Salvar
         </button>
       </form>
     </div>

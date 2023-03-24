@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { createSchedule, tel, CreateSchedule } from "../../../../services";
+import { createSchedule, tel } from "../../../../services";
 interface FormValues {
   id: number;
   name: string;
@@ -15,13 +15,12 @@ const Form: React.FC = () => {
     control,
     handleSubmit,
     register,
-    resetField,
+    reset,
     formState: { errors, isDirty, isValid },
   } = useForm<FormValues>();
   const [addInput, setAddInput] = React.useState(1);
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
     await createSchedule({
       name: data.name,
       email: data.email,
@@ -31,6 +30,7 @@ const Form: React.FC = () => {
         return item.number;
       }),
     });
+    reset();
   };
 
   const handleADDtel = () => {

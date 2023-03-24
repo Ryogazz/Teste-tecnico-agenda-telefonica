@@ -40,29 +40,17 @@ export function createSchedule(schedule: CreateSchedule) {
     .then((response) => response.data);
 }
 
-interface updateSchedule {
+interface UpdateSchedule {
   name: string;
   email: string;
   cpf: string;
   date_born: string;
-  numbers: {
-    id: number;
-    id_schedule: number;
-    number: string;
-  }[];
+  numbers: string[];
 }
 
-interface updateSchedulePromise {
-  status: boolean;
-  mesaage: string;
-}
-
-export function updateSchedule(
-  id: number,
-  updateSchedule: updateSchedule
-): Promise<updateSchedulePromise> {
+export function updateSchedule(id: number, updateSchedule: UpdateSchedule) {
   return axios
-    .put<updateSchedulePromise>(
+    .put(
       `http://teste-frontend.saperx.com.br/api/schedule/${id}`,
       updateSchedule
     )
@@ -71,7 +59,11 @@ export function updateSchedule(
 
 export function deleteSchedule(id: number): Promise<void> {
   return axios
-    .delete(`http://teste-frontend.saperx.com.br/api/schedule/${id}`)
+    .delete(`http://teste-frontend.saperx.com.br/api/schedule/${id}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    })
     .then(() => {});
 }
 
@@ -79,22 +71,4 @@ export interface tel {
   id: number;
   id_schedule: number;
   number: string;
-}
-export interface contact {
-  id: number;
-  name: string;
-  numbers: tel[];
-  email: string;
-  cpf: string;
-  date_born: string; // format: YYYY-mm-dd
-}
-export interface ScheduleById {
-  status: boolean;
-  data: contact[];
-}
-
-export function getScheduleById(id: number): Promise<ScheduleById> {
-  return axios
-    .get(`http://teste-frontend.saperx.com.br/api/schedule/${id}`)
-    .then((response) => response.data);
 }
