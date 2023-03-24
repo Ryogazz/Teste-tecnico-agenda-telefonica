@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const MenuContainer = styled.div`
   position: relative;
@@ -16,7 +16,7 @@ export const MenuList = styled.div`
 `;
 
 export const MenuItem = styled.div`
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 300;
   font-size: 19px;
@@ -26,6 +26,6 @@ export const MenuItem = styled.div`
   color: white;
   cursor: pointer;
   &:hover {
-    color: #A0141C;
+    color: #a0141c;
   }
 `;

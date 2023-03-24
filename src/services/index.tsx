@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export interface Schedule {
   status: boolean;
@@ -18,7 +18,7 @@ export interface Schedule {
 
 export function getAllSchedules(): Promise<Schedule> {
   return axios
-    .get<Schedule>("http://teste-frontend.saperx.com.br/api/schedule")
+    .get<Schedule>('http://teste-frontend.saperx.com.br/api/schedule')
     .then((response) => response.data);
 }
 
@@ -32,9 +32,9 @@ export interface CreateSchedule {
 
 export function createSchedule(schedule: CreateSchedule) {
   return axios
-    .post("http://teste-frontend.saperx.com.br/api/schedule", schedule, {
+    .post('http://teste-frontend.saperx.com.br/api/schedule', schedule, {
       headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
       },
     })
     .then((response) => response.data);
@@ -58,13 +58,14 @@ export function updateSchedule(id: number, updateSchedule: UpdateSchedule) {
 }
 
 export function deleteSchedule(id: number): Promise<void> {
-  return axios
-    .delete(`http://teste-frontend.saperx.com.br/api/schedule/${id}`, {
+  return axios.delete(
+    `http://teste-frontend.saperx.com.br/api/schedule/${id}`,
+    {
       headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
       },
-    })
-    .then(() => {});
+    }
+  );
 }
 
 export interface tel {

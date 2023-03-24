@@ -1,10 +1,10 @@
-import { usePath } from "../../hooks/usePath";
-import { Link } from "react-router-dom";
+import { usePath } from '../../hooks/usePath';
+import { Link } from 'react-router-dom';
 
 const Menu = () => {
   const { isCurrentPath } = usePath();
-  const active = "text-[#A0141C] font-semibold";
-  const general = "text-white font-normal";
+  const active = 'text-[#A0141C] font-semibold';
+  const general = 'text-white font-normal';
 
   return (
     <div className="relative top-0 left-0 right-0 w-full">
@@ -12,7 +12,7 @@ const Menu = () => {
         <Link
           to="/"
           className={`text-lg uppercase cursor-pointer hover:text-[#A0141C] ${
-            isCurrentPath("/") ? active : general
+            isCurrentPath('/') ? active : general
           }`}
         >
           Inicio
@@ -20,7 +20,7 @@ const Menu = () => {
         <Link
           to="/relatorio"
           className={`text-lg uppercase cursor-pointer hover:text-[#A0141C] ${
-            isCurrentPath("/relatorio") ? active : general
+            isCurrentPath('/relatorio') ? active : general
           }`}
         >
           Relatorio

@@ -1,6 +1,6 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { createSchedule, tel } from "../../../../services";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { createSchedule, tel } from '../../../../services';
 interface FormValues {
   id: number;
   name: string;
@@ -12,7 +12,6 @@ interface FormValues {
 
 const Form: React.FC = () => {
   const {
-    control,
     handleSubmit,
     register,
     reset,
@@ -56,7 +55,7 @@ const Form: React.FC = () => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="text"
               id="name"
-              {...register("name", {
+              {...register('name', {
                 required: true,
                 minLength: 6,
                 maxLength: 150,
@@ -72,7 +71,7 @@ const Form: React.FC = () => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="date"
               id="date_born"
-              {...register("date_born", { required: true })}
+              {...register('date_born', { required: true })}
             />
             {errors.date_born && (
               <span className="text-red-600">
@@ -88,7 +87,7 @@ const Form: React.FC = () => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="email"
               id="email"
-              {...register("email", { required: true })}
+              {...register('email', { required: true })}
             />
             {errors.email && (
               <span className="text-red-600">Email é obrigatório</span>
@@ -102,7 +101,7 @@ const Form: React.FC = () => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="text"
               id="cpf"
-              {...register("cpf", {
+              {...register('cpf', {
                 required: true,
                 maxLength: 11,
                 minLength: 11,

@@ -1,12 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext, useState } from 'react';
 
 interface EditData {
   id: number;
   name: string;
-  email : string,
-  date_born : string,
-  cpf : string,
-  numbers : string[]
+  email: string;
+  date_born: string;
+  cpf: string;
+  numbers: string[];
 }
 interface ModalContext {
   isModalOpened: boolean;
@@ -20,17 +20,17 @@ interface ModalContext {
 export const ModalContext = createContext<ModalContext>({
   isModalOpened: false,
   setIsModalOpened: () => {},
-  idModal: "",
+  idModal: '',
   setIdModal: () => {},
   editData: {
     id: 0,
-    name: "",
-    email : "",
-    date_born : "",
-    cpf : "",
-    numbers : []
+    name: '',
+    email: '',
+    date_born: '',
+    cpf: '',
+    numbers: [],
   },
-  setEditData: () => {}
+  setEditData: () => {},
 });
 
 export default function ModalProvider({
@@ -39,19 +39,26 @@ export default function ModalProvider({
   children: React.ReactNode;
 }) {
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [idModal, setIdModal] = useState("");
+  const [idModal, setIdModal] = useState('');
   const [editData, setEditData] = useState<EditData>({
     id: 0,
-    name: "",
-    email : "",
-    date_born : "",
-    cpf : "",
-    numbers : []
+    name: '',
+    email: '',
+    date_born: '',
+    cpf: '',
+    numbers: [],
   });
 
   return (
     <ModalContext.Provider
-      value={{ isModalOpened, setIsModalOpened, idModal, setIdModal,editData,setEditData }}
+      value={{
+        isModalOpened,
+        setIsModalOpened,
+        idModal,
+        setIdModal,
+        editData,
+        setEditData,
+      }}
     >
       {children}
     </ModalContext.Provider>

@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import { useForm } from "react-hook-form";
+import React, { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { ModalContext } from '../../../../../../../context/modalContext';
-import {  tel, updateSchedule } from "../../../../../../../services";
+import { tel, updateSchedule } from '../../../../../../../services';
 interface FormValues {
   id: number;
   name: string;
@@ -11,10 +11,9 @@ interface FormValues {
   numbers: tel[];
 }
 
-const Edit = ( ) => {
-
-  const {setIsModalOpened, editData} = useContext(ModalContext);
-  const {cpf,date_born,email,id,name,numbers} = editData;
+const Edit = () => {
+  const { setIsModalOpened, editData } = useContext(ModalContext);
+  const { cpf, date_born, email, id, name, numbers } = editData;
 
   const {
     handleSubmit,
@@ -24,7 +23,7 @@ const Edit = ( ) => {
   const [addInput, setAddInput] = React.useState(numbers.length);
 
   const onSubmit = async (data: FormValues) => {
-    await updateSchedule(id,{
+    await updateSchedule(id, {
       name: data.name,
       email: data.email,
       cpf: data.cpf,
@@ -60,7 +59,7 @@ const Edit = ( ) => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="text"
               id="name"
-              {...register("name", {
+              {...register('name', {
                 required: true,
                 minLength: 6,
                 maxLength: 150,
@@ -77,7 +76,7 @@ const Edit = ( ) => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="date"
               id="date_born"
-              {...register("date_born", { required: true })}
+              {...register('date_born', { required: true })}
             />
             {errors.date_born && (
               <span className="text-red-600">
@@ -94,7 +93,7 @@ const Edit = ( ) => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="email"
               id="email"
-              {...register("email", { required: true })}
+              {...register('email', { required: true })}
             />
             {errors.email && (
               <span className="text-red-600">Email é obrigatório</span>
@@ -109,7 +108,7 @@ const Edit = ( ) => {
               className="rounded-md h-8 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               type="text"
               id="cpf"
-              {...register("cpf", {
+              {...register('cpf', {
                 required: true,
                 maxLength: 11,
                 minLength: 11,

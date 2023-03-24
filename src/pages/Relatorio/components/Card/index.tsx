@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
-import { ModalContext } from "../../../../context/modalContext";
-import Modal from "./components/Modal";
+import React, { useContext } from 'react';
+import { ModalContext } from '../../../../context/modalContext';
 
 interface CardProps {
   id: number;
@@ -19,7 +18,7 @@ const Card: React.FC<CardProps> = ({
   cpf,
   numbers,
 }) => {
-  const { isModalOpened, setIsModalOpened, idModal, setIdModal, setEditData } =
+  const { setIsModalOpened, setIdModal, setEditData } =
     useContext(ModalContext);
 
   return (
@@ -31,7 +30,7 @@ const Card: React.FC<CardProps> = ({
       {numbers.length > 0 && (
         <div className="mb-2">
           <p className="text-gray-700 mb-2">
-            Telefone{numbers.length > 1 && "s"}:
+            Telefone{numbers.length > 1 && 's'}:
           </p>
           <ul>
             {numbers.map((numero, index) => (
@@ -46,7 +45,7 @@ const Card: React.FC<CardProps> = ({
                 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
                 "
             onClick={() => {
-              setIdModal("edit");
+              setIdModal('edit');
               setIsModalOpened(true);
               setEditData({ id, name, email, date_born, cpf, numbers });
             }}
@@ -59,7 +58,7 @@ const Card: React.FC<CardProps> = ({
                 hover:bg-red-700 focus:ring-4 focus:ring-blue-300 text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none
                 "
             onClick={() => {
-              setIdModal("delete");
+              setIdModal('delete');
               setIsModalOpened(true);
               setEditData({ id, name, email, date_born, cpf, numbers });
             }}
@@ -68,7 +67,6 @@ const Card: React.FC<CardProps> = ({
           </button>
         </div>
       )}
-
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import Footer from "../../components/Footer";
-import Menu from "../../components/Menu";
-import Card from "./components/Card";
-import { getAllSchedules } from "../../services";
-import { useEffect, useState } from "react";
-import ModalProvider, { ModalConsumer } from "../../context/modalContext";
+import Footer from '../../components/Footer';
+import Menu from '../../components/Menu';
+import Card from './components/Card';
+import { getAllSchedules } from '../../services';
+import { useCallback, useEffect, useState } from 'react';
+import ModalProvider, { ModalConsumer } from '../../context/modalContext';
 import Modal from './components/Card/components/Modal';
 
 const Relatorio = () => {
@@ -27,7 +27,7 @@ const Relatorio = () => {
     }[];
   }
 
-  const renderCards = async () => {
+  const renderCards = useCallback(async () => {
     const response = await getData();
     const data = response.data;
     const cards = data.map((item: CardProps) => {
@@ -44,13 +44,16 @@ const Relatorio = () => {
       );
     });
     return cards;
-  };
+  }, []);
 
   useEffect(() => {
-    renderCards().then((cards) => {
-      setCards(cards);
-    });
-  }, []);
+    renderCards()
+      .then((cards) => {
+        setCards(cards);
+        return;
+      })
+      .catch(() => {});
+  }, [renderCards]);
 
   return (
     <div className="min-h-screen w-screen flex flex-col justify-between items-center bg-gray-100">
@@ -59,14 +62,16 @@ const Relatorio = () => {
         <ModalProvider>
           {cards}
           <ModalConsumer>
-           { ({isModalOpened, setIsModalOpened}) =>  isModalOpened && (
-              <div
-                className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
-                onClick={() => setIsModalOpened(false)}
-              >
-                <Modal />
-              </div>
-            )}
+            {({ isModalOpened, setIsModalOpened }) =>
+              isModalOpened && (
+                <div
+                  className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
+                  onClick={() => setIsModalOpened(false)}
+                >
+                  <Modal />
+                </div>
+              )
+            }
           </ModalConsumer>
         </ModalProvider>
       </div>

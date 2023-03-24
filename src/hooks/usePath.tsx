@@ -1,15 +1,14 @@
-import { useLocation } from "react-router-dom"
+import { useLocation } from 'react-router-dom';
 
 export const usePath = () => {
+  const { pathname } = useLocation();
   const isCurrentPath = (link: string) => {
-    const { pathname } = useLocation()
+    if (link === pathname) return true;
 
-    if (link === pathname) return true
-
-    return false
-  }
+    return false;
+  };
 
   return {
-    isCurrentPath
-  }
-}
+    isCurrentPath,
+  };
+};
